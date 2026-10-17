@@ -224,7 +224,7 @@
 |jsonescape|`jsonescape '{"distrib": "SkillArch", "quote": "That'"'"'s awesome!"}'` → {\"distrib\": \"SkillArch\", \"quote\": \"That's awesome!\"}|
 |jsonunescape|`jsonunescape '{\"distrib\": \"SkillArch\", \"quote\": \"That'"'"'s awesome!\"}'` → {"distrib": "SkillArch", "quote": "That's awesome!"}|
 |kamoso|Webcam application (KDE)|
-|kasmvncserver|Stream KDE Plasma desktop via browser|
+|kasmvncserver|Stream i3 desktop via browser|
 |katana|Next-gen crawling and spidering framework|
 |kdenlive|Non-linear video editor (KDE)|
 |killit|`sudo kill -KILL`|

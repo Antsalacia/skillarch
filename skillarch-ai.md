@@ -8,7 +8,7 @@
 
 - **OS**: CachyOS (Arch Linux, performance-tuned)
 - **Shell**: Zsh + Oh-My-Zsh + Powerlevel10k (`af-magic` theme)
-- **WM/DE**: i3-gaps + Polybar + Rofi + Picom + Kitty terminal + KDE Plasma X11
+- **WM/DE**: i3-gaps (X11) + Polybar + Rofi + Picom + Kitty terminal + KDE Plasma (Wayland)
 - **Editors**: Neovim (LazyVim), VS Code (`code`)
 - **Install root**: `/opt/skillarch/` — all dotfiles symlinked from here
 - **Data root**: `/DATA/` — long-lived user data
@@ -60,7 +60,7 @@ make clean              # Docker-only: clear caches (pacman, yay, pip, mise, go,
 | `ska-update-simple` | `ska && make update && make install` |
 | `ska-update-advanced` | Interactive upstream-merge for forks (commit local → fetch → preview → merge → push → reapply, all Y/n-prompted) |
 | `ska-sudo-unlock` | Reset faillock after 3 bad sudo attempts |
-| `ska-vnc` | Prompt for VNC password, set it, start KasmVNC on :1 |
+| `ska-vnc` | Start an i3 desktop in KasmVNC on :1 |
 | `ska-vbox-install-guestutils` | Install VirtualBox guest utils |
 | `fastfetch` / `neofetch` / `hifetch` | fastfetch with SkillArch logo |
 
@@ -380,19 +380,22 @@ Installs KasmVNC (`kasmvncserver-bin`) + `openssl-1.1` (AUR, required — KasmVN
 
 | Service | Status | Start | Purpose |
 |---|---|---|---|
-| *(user-level)* | not installed by default | `ska-vnc` or `kasmvncserver :1` | KasmVNC remote desktop (yay: `kasmvncserver-bin`) |
+| *(user-level)* | not installed by default | `ska-vnc` or `kasmvncserver :1` | KasmVNC i3 remote desktop (yay: `kasmvncserver-bin`) |
 
 #### KasmVNC Usage
-SSL is disabled (config: `~/.vnc/kasmvnc.yaml`). Access via SSH port-forward only.
+TLS uses the self-signed certificate created by `make cloud`. The server is bound to localhost and `ska-vnc` disables basic authentication, so access it through an SSH port-forward only.
+
+Plasma 6.8 is Wayland-only, while KasmVNC provides an X server. The VNC startup script therefore launches i3; do not restore an X11 Plasma launcher.
+
 ```bash
-# Quick start (prompts for password, starts server):
+# Quick start (no auth, localhost only):
 ska-vnc
 # Or manual setup:
 kasmvncpasswd -u $USER -w -r
 kasmvncserver :1 -config ~/.vnc/kasmvnc.yaml
 # From your local machine, SSH port-forward:
 ssh -L 8443:localhost:8443 user@host
-# Access: http://localhost:8443
+# Access: https://localhost:8443
 # Stop server
 kasmvncserver -kill :1
 ```

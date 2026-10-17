@@ -206,8 +206,8 @@ install-gui: sanity-check ## Install i3, polybar, kitty, rofi, picom, KDE Plasma
 	$(call INFO,Installing GUI & window manager...)
 	[[ ! -f /etc/machine-id ]] && sudo systemd-machine-id-setup || true
 	$(PACMAN_INSTALL) xorg-server cachyos-kde-settings plasma-meta i3-gaps i3blocks i3lock i3lock-fancy-git i3status dmenu feh rofi nm-connection-editor picom polybar kitty brightnessctl xorg-xhost
-	# KDE Plasma X11 - Plasma 6 + kwin_x11, also used by cloud VNC target
-	$(PACMAN_INSTALL) plasma-desktop plasma-x11-session kwin-x11 konsole alacritty
+	# Plasma 6.8 is Wayland-only; i3 provides the X11 session used locally and by KasmVNC
+	$(PACMAN_INSTALL) plasma-desktop konsole alacritty
 	yay --noconfirm --needed -S rofi-power-menu i3-battery-popup-git
 	# -- KDE Dark Theme (BreezeDark) --
 	# plasma-apply-colorscheme needs a running Plasma session (D-Bus); during install
