@@ -8,7 +8,7 @@
 
 - **OS**: CachyOS (Arch Linux, performance-tuned)
 - **Shell**: Zsh + Oh-My-Zsh + Powerlevel10k (`af-magic` theme)
-- **WM/DE**: i3-gaps (X11) + Polybar + Rofi + Picom + Kitty terminal + KDE Plasma (Wayland)
+- **WM/DE**: i3-gaps (local X11) + KDE Plasma (local Wayland) + Xfce (KasmVNC remote desktop)
 - **Editors**: Neovim (LazyVim), VS Code (`code`)
 - **Install root**: `/opt/skillarch/` — all dotfiles symlinked from here
 - **Data root**: `/DATA/` — long-lived user data
@@ -25,7 +25,7 @@ make install-base       # Repo setup, pacman config, chaotic-aur, /DATA dir
 make install-cli-tools  # CLI tools, mise runtimes (Python/Node/Go/Rust), uv tools, neovim+LazyVim
 make install-shell      # Zsh, oh-my-zsh, fzf, tmux, vim, dotfile symlinks
 make install-docker     # Docker + Docker Compose, user added to docker group
-make install-gui        # i3, polybar, kitty, rofi, picom, KDE Plasma, touchpad config
+make install-gui        # i3, KDE Plasma, Xfce for KasmVNC, and GUI/touchpad config
 make install-gui-tools  # Chrome, VSCode, Ghidra, Discord, VLC, Wireshark
 make install-offensive  # Metasploit, ffuf, pdtm tools, go binaries, GitHub releases, cloned tools
 make install-wordlists  # All wordlists to /opt/lists/
@@ -60,7 +60,7 @@ make clean              # Docker-only: clear caches (pacman, yay, pip, mise, go,
 | `ska-update-simple` | `ska && make update && make install` |
 | `ska-update-advanced` | Interactive upstream-merge for forks (commit local → fetch → preview → merge → push → reapply, all Y/n-prompted) |
 | `ska-sudo-unlock` | Reset faillock after 3 bad sudo attempts |
-| `ska-vnc` | Start an i3 desktop in KasmVNC on :1 |
+| `ska-vnc` | Start a mouse/touch-friendly Xfce desktop in KasmVNC on :1 |
 | `ska-vbox-install-guestutils` | Install VirtualBox guest utils |
 | `fastfetch` / `neofetch` / `hifetch` | fastfetch with SkillArch logo |
 
@@ -310,6 +310,9 @@ make clean              # Docker-only: clear caches (pacman, yay, pip, mise, go,
 
 ## Installed Tools
 
+### GUI / Desktops (pacman)
+`i3-wm`, `polybar`, `rofi`, `picom`, `kitty`, `plasma-meta` (Wayland), `xfce4-session`, `xfce4-panel`, `xfdesktop`, `xfwm4` (KasmVNC X11 desktop)
+
 ### CLI & Productivity (pacman)
 `bat`, `eza`, `fzf`, `ripgrep`, `fd`, `jq`, `glow`, `jless`, `gron`, `htmlq`, `qsv`, `viu`, `superfile`, `fastfetch`, `asciinema`, `bottom`, `htop`, `tmux`, `git-delta`, `lazygit`, `fq`, `fx`, `websocat`, `cloc`, `tree`, `rlwrap`, `parallel`, `tmate`, `trash-cli`, `sysstat`, `inotify-tools`
 
@@ -380,12 +383,12 @@ Installs KasmVNC (`kasmvncserver-bin`) + `openssl-1.1` (AUR, required — KasmVN
 
 | Service | Status | Start | Purpose |
 |---|---|---|---|
-| *(user-level)* | not installed by default | `ska-vnc` or `kasmvncserver :1` | KasmVNC i3 remote desktop (yay: `kasmvncserver-bin`) |
+| *(user-level)* | not installed by default | `ska-vnc` or `kasmvncserver :1` | KasmVNC Xfce remote desktop (yay: `kasmvncserver-bin`) |
 
 #### KasmVNC Usage
 TLS uses the self-signed certificate created by `make cloud`. The server is bound to localhost and `ska-vnc` disables basic authentication, so access it through an SSH port-forward only.
 
-Plasma 6.8 is Wayland-only, while KasmVNC provides an X server. The VNC startup script therefore launches i3; do not restore an X11 Plasma launcher.
+Plasma 6.8 is Wayland-only, while KasmVNC provides an X server. The VNC startup script therefore launches Xfce, providing a conventional panel, application menu, desktop, settings UI, and window controls suited to remote and mobile use.
 
 ```bash
 # Quick start (no auth, localhost only):
